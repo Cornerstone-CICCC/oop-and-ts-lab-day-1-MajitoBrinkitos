@@ -106,7 +106,7 @@ class Bird extends Animal {
   #canFly
 
   constructor(name, species, canFly) {
-    super(name, species, 100)
+    super(name, species, 100) // Default energy level for Bird: 100
     this.#canFly = canFly
   }
 
@@ -126,22 +126,24 @@ class Bird extends Animal {
         if (this.getEnergy() === 0) {
             return `${this.getName()} cannot attack. It needs to eat!`;
         }
+
         this.setEnergy(this.getEnergy() - 20);
         if(this.getEnergy() < 0){
             this.setEnergy(0);
         }
+
         target.setEnergy(target.getEnergy() - 20);
         if(target.getEnergy() < 0){
             target.setEnergy(0);
         }
 
-        if(this.getEnergy() === 0 && target.getEnergy() === 0) {
-            return `${this.getName()} and ${target.getName()} are out of energy.`;
-        } else if(this.getEnergy() === 0){
+       if(this.getEnergy() === 0 && target.getEnergy() === 0){
+            return `${this.getName()} and ${target.getName()} are out of energy`;
+       } else if (this.getEnergy() === 0){
             return `${target.getName()} has won!`;
-        } else if(target.getEnergy() === 0){
-            return `${this.getName()} has won!`;
-        }
+       } else if (target.getEnergy() === 0){
+        return `${this.getName()} has won!`;
+       }
 
         Animal.remainingAnimals = Animal.remainingAnimals.filter(animal => animal.getEnergy() > 0);
     }
@@ -160,7 +162,7 @@ class Mammal extends Animal {
     #furColor
 
     constructor(name, species, furColor) {
-        super(name, species, 200)
+        super(name, species, 200) //Default level of energy for Mammal
         this.#furColor = furColor
     }
 
@@ -174,7 +176,39 @@ class Mammal extends Animal {
     }
 
     //Attack
-    attack(target) {}
+    attack(target) {
+        if(this.getEnergy() === 0){
+            return `${this.getName()} cannot attack. It needs to eat!`;
+        }
+
+        this.setEnergy(this.getEnergy() - 50);
+        if(this.getEnergy()<0){
+            this.setEnergy(0);
+        }
+
+        target.setEnergy(target.getEnergy() - 50);
+        if(target.getEnergy() < 0){
+            target.setEnergy(0);
+        }
+
+        if(this.getEnergy() === 0 && target.getEnergy() === 0){
+            return `${this.getName()} and ${target.getName()} are out of energy`;
+        } else if(this.getEnergy() === 0){
+            return `${target.getName()} has won!`
+        } else if (target.getEnergy() === 0) {
+            return `${this.getName()} has won`;
+        }
+
+        Animal.remainingAnimals = Animal.remainingAnimals.filter( animal => animal.getEnergy() > 0);
+    }
+
+    eat(){
+        this.setEnergy(this.getEnergy() + 20);
+        if(this.getEnergy() > 200){
+            this.setEnergy(200);
+        }
+        return `${this.getName()} ate and increased their energy level to ${this.getEnergy()}. Let's go and attack!`;
+    }
 }
 
 class Reptile extends Animal {
@@ -192,6 +226,41 @@ class Reptile extends Animal {
 
     set coldBlooded(coldBlooded) {
         this.#coldBlooded = coldBlooded
+    }
+
+    attack(target){
+        if (this.getEnergy() === 0) { 
+            return `${this.getName()} cannot attack. It needs to eat!`; 
+        }
+
+        this.setEnergy(this.getEnergy() - 30); 
+        if (this.getEnergy() < 0) { 
+            his.setEnergy(0); 
+        }
+
+        target.setEnergy(target.getEnergy() - 30); 
+        if (target.getEnergy() < 0) { 
+            target.setEnergy(0); 
+        }
+
+        if (this.getEnergy() === 0 && target.getEnergy() === 0) {
+             return `${this.getName()} and ${target.getName()} are out of energy.`; 
+            } else if (this.getEnergy() === 0) { 
+                return `${target.getName()} has won!`; 
+            } else if (target.getEnergy() === 0) { 
+                return `${this.getName()} has won!`; 
+            }
+        
+            Animal.remainingAnimals = Animal.remainingAnimals.filter( animal => animal.getEnergy() > 0);
+    }
+
+    //eat method
+    eat(){
+        this.setEnergy(this.getEnergy() + 15);
+        if (this.getEnergy() > 100){
+            this.setEnergy(100);
+        }
+        return `${this.getName()} ate and increased their energy level to ${this.getEnergy()}. Let's go and attack!`;
     }
 }
 
@@ -211,12 +280,16 @@ console.log(`Name: ${snake.getName()}, Species: ${snake.getSpecies()}, Cold-Bloo
 console.log("\n--- Attacks ---");
 eagle.attack(lion);
 lion.attack(snake);
+snake.attack(eagle)
 
 // Display the remaining number of animals with energy
-console.log(`Remaining animals with energy: ${Animal.remainingAnimals}`);
+console.log(`Remaining animals with energy: ${Animal.remainingAnimals.map(animal => animal.getName()).join(", ")}`);
 
 // Example eating
 console.log("\n--- Eating ---");
-eagle.eat();
-lion.eat();
-snake.eat();
+console.log(eagle.eat());
+console.log(`${eagle.getName()}'s energy: ${eagle.getEnergy()}`);
+console.log(lion.eat());
+console.log(`${lion.getName()}'s energy: ${lion.getEnergy()}`);
+console.log(snake.eat());
+console.log(`${snake.getName()}'s energy: ${snake.getEnergy()}`);
